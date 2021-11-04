@@ -55,11 +55,12 @@ export default class BinarySearchTree {
     }
 
     private insertNode(node: Node, key: number) {
-        const sideToAdd = this.compareFn(key, node.key) === Compare.LESS_THAN ? 'left' : 'right';
+        const comparison = this.compareFn(key, node.key);
+        const sideToAdd = comparison === Compare.LESS_THAN ? 'left' :  'right';
         const nodeFilled = node[sideToAdd];
 
         if (!nodeFilled) {
-            node[sideToAdd] = new Node(key);
+            if(comparison !== Compare.EQUALS) node[sideToAdd] = new Node(key);
         } else {
             this.insertNode(nodeFilled, key)
         }
@@ -122,20 +123,19 @@ export default class BinarySearchTree {
 
     private removeNode(node: Node | null, key: number): Node | null {
         if (!node) return null;
-        const comparation = this.compareFn(key, node.key);
+        const comparison = this.compareFn(key, node.key);
 
-        if (comparation === Compare.LESS_THAN) {
+        if (comparison === Compare.LESS_THAN) {
             node.left = this.removeNode(node.left, key);
             return node;
-        } else if (comparation === Compare.BIGGER_THAN) {
+        } else if (comparison === Compare.BIGGER_THAN) {
             node.right = this.removeNode(node.right, key);
             return node
         } else {
             if (node.left === null && node.right === null) {
                 node = null;
                 return node;
-            }
-            if (node.left === null) {
+            } else if (node.left === null) {
                 node = node.right;
                 return node;
             } else if (node.right === null) {
@@ -145,7 +145,7 @@ export default class BinarySearchTree {
 
             const rightSide = node.right;
             const replacement = this.minNode(rightSide)
-            this.removeNode(rightSide, replacement.key);
+            node.right = this.removeNode(rightSide, replacement.key);
             node.key = replacement.key;
             return node;
         }
@@ -153,10 +153,3 @@ export default class BinarySearchTree {
 
     }
 }
-
-const values = [11, 13, 7, 12, 20, 18, 19, 25, 15, 19, 16, 14, 17, 22, 28, 21, 23];
-
-const tree = new BinarySearchTree();
-values.forEach(i => tree.insert(i));
-
-console.log(JSON.stringify(tree))

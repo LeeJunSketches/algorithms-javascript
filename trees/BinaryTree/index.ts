@@ -8,18 +8,18 @@ const postOrderValues: number[] = [];
 const tree = new BinarySearchTree();
 valuesToAdd.forEach(i => tree.insert(i));
 
-// Walking through
+///////// Walking through ////
 // tree.inOrderTraverse((value: number) => inOrderValues.push(value))
 // tree.preOrderTraverse((value: number) => preOrderValues.push(value))
 // tree.postOrderTraverse((value: number) => postOrderValues.push(value))
-
 // console.log({ inOrderValues, preOrderValues, postOrderValues });
+/////////////////////////////
 
-
-// Searching
+///////// Searching ////
 const min = tree.min();
 const max = tree.max();
 
 const found = valuesToAdd.every(i => tree.search(i));
 
 console.log({ min, max, found })
+/////////////////////////////
